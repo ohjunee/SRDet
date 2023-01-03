@@ -1,0 +1,27 @@
+# parameters
+nc: 80  # number of classes
+depth_multiple: 1.0  # model depth multiple
+width_multiple: 1.0  # layer channel multiple
+
+# anchors
+anchors:
+  - [10,13, 16,30, 33,23]  # P3/8
+  - [30,61, 62,45, 59,119]  # P4/16
+  - [116,90, 156,198, 373,326]  # P5/32
+
+# EDSR
+SR_model:
+  # [from, number, module, args]
+  [[-1, 1, MeanShift, [3, -1]],  # args: rgb_range
+   [-1, 1, default_conv, [128, 3]],
+   [-1, 8, ResBlock, [128, 3]],
+   [-1, 1, default_conv, [128, 3]],
+   [[-1, 1], 1, Add, [2]],
+   [-1, 1, Upsampler, [128, 2]], # scale : 2,4 -> 256,  scale : 3 -> 9*64, scale
+   [-1, 1, default_conv, [3, 3]],
+   [-1, 1, MeanShift, [3, 1]],
+  ]
+
+backbone: []
+
+head: []
